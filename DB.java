@@ -83,7 +83,7 @@ public class DB
     System.out.println("MySQL JDBC Driver Registered!");
     int count = 0;
     try {
-      connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
+      connection = DriverManager.getConnection("jdbc:mysql://mysql/shipplotter", "shipplotter", "shipplotter");
       for (int i = 49; i < line.length; i++)
       {
 	      String[] la = line[i].split(",");
@@ -156,7 +156,7 @@ public class DB
     System.out.println("MySQL JDBC Driver Registered!");
     int count = 0;
     try {
-      connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
+      connection = DriverManager.getConnection("jdbc:mysql://mysql/shipplotter", "shipplotter", "shipplotter");
       for (int i = 0; i < line.length; i++)
       {
 	      String[] la = line[i].split(":");
