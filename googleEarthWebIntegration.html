@@ -1,0 +1,101 @@
+<html>
+<head>
+  <title>Sample</title>
+  <script type="text/javascript" src="https://www.google.com/jsapi"> </script>
+  
+  <script type="text/javascript">
+      function addSampleButton(caption, clickHandler) {
+        var btn = document.createElement('input');
+        btn.type = 'button';
+        btn.value = caption;
+        
+        if (btn.attachEvent)
+          btn.attachEvent('onclick', clickHandler);
+        else
+          btn.addEventListener('click', clickHandler, false);
+
+        // add the button to the Sample UI
+        document.getElementById('sample-ui').appendChild(btn);
+      }
+      
+      function addSampleUIHtml(html) {
+        document.getElementById('sample-ui').innerHTML += html;
+      }
+    </script>
+  <script type="text/javascript">
+    var ge;
+    google.load("earth", "1", {"other_params":"sensor=true_or_false"});
+
+    function init() {
+      google.earth.createInstance('map3d', initCB, failureCB);
+    }
+
+    function initCB(instance) {
+      ge = instance;
+      ge.getWindow().setVisibility(true);
+	  ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+	  
+	      //add buttons and textbox
+      jumpHtml = '<input type="text" id="clockRate" value="60*60*24*365">';
+      document.getElementById('sample-ui').innerHTML += jumpHtml;
+      addSampleButton('Set rate', setRate);
+    }
+	
+	 function setRate(rate){
+      var rate = document.getElementById('clockRate').value;
+      ge.getTime().setRate(eval(rate));
+      }
+ function failureCB(errorCode) {
+  }  
+
+  var currentKmlObject = null
+  
+  function fetchKmlFromInput() {
+    // remove the old KML object if it exists
+    if (currentKmlObject) {
+      ge.getFeatures().removeChild(currentKmlObject);
+      currentKmlObject = null;
+    }
+    
+    var kmlUrlBox = document.getElementById('kml-url');
+    var kmlUrl = kmlUrlBox.value;
+    
+    google.earth.fetchKml(ge, kmlUrl, finishFetchKml);
+  }
+  
+  function finishFetchKml(kmlObject) {  	
+    // check if the KML was fetched properly
+    if (kmlObject) {
+      // add the fetched KML to Earth
+      currentKmlObject = kmlObject;
+      ge.getFeatures().appendChild(currentKmlObject);
+    } else {
+      // wrap alerts in API callbacks and event handlers
+      // in a setTimeout to prevent deadlock in some browsers
+      setTimeout(function() {
+        alert('Bad or null KML.');
+      }, 0);
+    }
+  }
+  
+  function buttonClick() {
+    fetchKmlFromInput();
+  }	
+	
+	
+	
+	//    google.setOnLoadCallback(init);
+  </script>
+
+</head>
+<body onload="init();">
+<div id="sample-ui"></div>
+<h2>Fetch KML at this URL:</h2>
+<form action="#" method="get" onsubmit="return false;">
+<input type="text" id="kml-url" size="50" value="http://katinkaroerup.dk/PlaceMarkers.kml"/><br/>
+<input type="submit" onclick="buttonClick()" value="Fetch KML!"/>
+</form>       
+
+  <div id="map3d" ></div>
+</body>
+</html>
