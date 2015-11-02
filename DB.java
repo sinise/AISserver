@@ -27,7 +27,7 @@ public class DB
 
     try {
         Class.forName("com.mysql.jdbc.Driver");
-        String url = "jdbc:mysql://localhost/shipplotter";
+        String url = "jdbc:mysql://mysql/shipplotter";
         con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
     }
     catch (Exception e) {
